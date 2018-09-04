@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>MVVM</title>
 </head>
+
 <body>
   <div id="app">
-    <input type="text" v-model="text" value="1"> {{ text }}
-    <button @click="reset" style="display:block;">重置</button>
+    <input type="text" v-model="text">{{ text }}
+    <br>
+    <button @click="update">重置</button>
   </div>
-  <script src="./js.js"></script>
+
+  <script src="./index.js"></script>
   <script>
-    var vm = new Mvvm({
+    let mvvm = new MVVM({
       el: 'app',
       data: {
-        text: 'hello world'
+        text: 'hello MVVM'
       },
       methods: {
-        reset() {
-          this.text = '';
-        },
-      },
-    });
+        update() {
+          this.text = ''
+        }
+      }
+    })
   </script>
 </body>
+
 </html>
