@@ -20,9 +20,9 @@ class MVVM {
 
   // 将拦截的数据绑定到this上面
   definition(root, key, value) {
-    if (typeof value === 'object') { // 假如value是对象则接着递归
-      return this.observer(value, value)
-    }
+    // if (typeof value === 'object') { // 假如value是对象则接着递归
+    //   return this.observer(value, value)
+    // }
     let dispatcher = new Dispatcher() // 调度员
 
     Object.defineProperty(root, key, {
