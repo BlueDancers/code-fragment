@@ -86,6 +86,15 @@ Compile.prototype = {
 }
 
 var compileUtil = {
+  bind: function (node, vm, exp, dir) {
+    var updaterFn = updater[dir + 'Updater']
+    updaterFn && updaterFn(node, this._getVMVal(vm, exp)) //关键代码 将匹配出来的键转换成为值
+    //所有的更新都走build进行分发,所以在build里面进行订阅
+    //此操作会在对应的属性消息订阅器中添加了该订阅者watcher
+    new Watcher(vm, exp, function (value, oldValue) {
+      updaterFn && updaterFn(node, value, oldValue)
+    })
+  },
   text: function (node, vm, exp) {
     this.bind(node, vm, exp, 'text')
   },
@@ -116,27 +125,17 @@ var compileUtil = {
       )
     }
   },
-  bind: function (node, vm, exp, dir) {
-    var updaterFn = updater[dir+ 'Updater']
-    updaterFn && updaterFn(node, this._getVMVal(vm, exp))  //关键代码 将匹配出来的键转换成为值
-    //所有的更新都走build进行分发,所以在build里面进行订阅
-    //此操作会在对应的属性消息订阅器中添加了该订阅者watcher
-    new Watcher(vm, exp, function (value, oldValue) {
-      updaterFn && updaterFn(node, value, oldValue)
-    })
-    
-  },
   _getVMVal: function (vm, exp) {
-    //return vm[exp] // 将data的值取出来 
+    //return vm[exp] // 对data的键进行解析
 
     var val = vm
     exp = exp.split('.') // 因为data可能不止一层
-    exp.forEach(function (k) {  //这里有点蒙圈
-      val = val[k]
+    exp.forEach(function (k) {  //这里有点蒙圈,应该是取最后一个
+      val = val[k]  //这里获取了vm的属性
     })
     return val
   },
-  _setVMVal: function (vm, exp, newValue) {
+  _setVMVal: function (vm, exp, newValue) {  // 更新mvvm的vm上面的data,触发set事件
     var val = vm
     exp = exp.split('.')
     exp.forEach(function (key, index) {
@@ -151,7 +150,7 @@ var compileUtil = {
 
 }
 
-var updater = {
+var updater = {  // 将指令更新为data数据
   textUpdater: function (node, value) {
     node.textContent = typeof value === 'undefined' ? '' : value //更新text
   },

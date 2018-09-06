@@ -3,32 +3,28 @@ function Watcher(vm, expOrFn, cb) {
   this.vm = vm;
   this.expOrFn = expOrFn;
   this.depIds = {};
-  console.log(this);
-
   if (typeof expOrFn === 'function') {
     this.getter = expOrFn;
   } else {
     this.getter = this.parseGetter(expOrFn);
   }
 
-  this.value = this.get();
+  this.get();
+  //this.value 为更新的data的值
 }
 
 Watcher.prototype = {
   update: function () {
     this.run();
-    console.log("watcher set执行");
   },
   run: function () {
     var value = this.get();
     var oldVal = this.value;
     if (value !== oldVal) {
-      this.value = value;
       this.cb.call(this.vm, value, oldVal);
     }
   },
   addDep: function (dep) {
-    console.log("watcher的 get事件");
     // 1. 每次调用run()的时候会触发相应属性的getter
     // getter里面会触发dep.depend()，继而触发这里的addDep
     // 2. 假如相应属性的dep.id已经在当前watcher的depIds里，说明不是一个新的属性，仅仅是改变了其值而已
@@ -46,12 +42,15 @@ Watcher.prototype = {
     if (!this.depIds.hasOwnProperty(dep.id)) {
       dep.addSub(this);
       this.depIds[dep.id] = dep;
+      console.log(dep);
+      
     }
   },
   get: function () {
     Dispatcher.target = this;
-    var value = this.getter.call(this.vm, this.vm);
+    var value = this.getter.call(' ', this.vm); // 这个第二参数是给return返回值的
     Dispatcher.target = null;
+    
     return value;
   },
 
@@ -61,13 +60,12 @@ Watcher.prototype = {
     var exps = exp.split('.');
 
     return function (obj) {
+      
       for (var i = 0, len = exps.length; i < len; i++) {
         if (!obj) return;
-        obj = obj[exps[i]];
+        obj = obj[exps[i]];  // 取出data数据
       }
-      console.log("watcher 的 obj" + obj);
-
-      return obj;
+      return obj; //返回data的数据
     }
   }
 };

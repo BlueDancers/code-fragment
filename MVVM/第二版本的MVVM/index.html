@@ -7,15 +7,14 @@
 </head>
 
 <body>
-
   <div id="mvvm-app">
-    <input type="text" v-model="someStr">
-    <input type="text" v-model="child.someStr">
+    <!-- <input type="text" v-model="someStr">
+    <input type="text" v-model="child.someStr"> -->
     <!-- <p v-class="className" class="abc">
         {{someStr}}
         <span v-text="child.someStr"></span>
     </p> -->
-    {{someStr}}
+    <!-- {{someStr}} -->
     <p>{{getHelloWord}}</p>
     <p v-html="htmlStr"></p>
     <button v-on:click="clickBtn">change model</button>
@@ -49,9 +48,9 @@
         }
       }
     });
-    // vm.$watch('child.someStr', function () {
-    //   console.log(arguments);
-    // });
+    vm.watch('child.someStr', function () {
+      console.log("数据发生变化");
+    });
   </script>
 
 </body>
