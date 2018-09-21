@@ -1,0 +1,3 @@
+<view>
+  <canvas canvas-id='can'></canvas>
+</view>
