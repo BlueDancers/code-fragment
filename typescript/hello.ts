@@ -24,3 +24,16 @@ NNN = 7
 console.log(NNN.fileName);
 
 
+
+interface Persss {
+    readonly name: string;
+    age?: string;
+    [propName: string] :any;
+}
+let toms: Persss = {
+    id: 3111,
+    name: 'Tom',
+    gender: 'male'
+}
+toms.id = 33131
+
