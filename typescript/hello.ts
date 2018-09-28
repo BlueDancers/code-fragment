@@ -67,25 +67,87 @@ function sum() {
 
 // 常见的有IArgument NodeList HTMLCollection 等等
 
-
 //函数
 function susm(x: number, y: number): number {
-    return x + y
+  return x + y
 }
-susm(1,2)
+susm(1, 2)
 
-let mySum = function (x: number,y: number): number {
-    return x + y
+let mySum = function(x: number, y: number): number {
+  return x + y
 }
 
-mySum(1,2)
+mySum(1, 2)
 
-let mySums: (x:number, y:number) => number = function (x: number,y: number): number {
-    return x + y
+let mySums: (x: number, y: number) => number = function(
+  x: number,
+  y: number
+): number {
+  return x + y
 }
 // 在typescript里面, => 表示函数1的定义,左边是输出类型,需要使用括号括起来,右边是输出类型
-mySums(1,2)
+mySums(1, 2)
 
 //感觉写法基本一样的,,功能也是基本一样的
+
+interface SearchFun {
+  (souce: string, subString: string): boolean
+}
+
+let mySearch: SearchFun
+
+mySearch = function(souce: string, subString: string) {
+  return souce.search(subString) !== -1
+}
+//接口的形式定义函数的新装
+
+function buildName(firstName: string, lastName?: string) {
+  if (lastName) {
+    return firstName + lastName
+  } else {
+    return firstName
+  }
+}
+
+// lastName ?: 表示可变参数
+
+let tomcat = buildName('tom', 'cat')
+let tom = buildName('tom')
+
+// 规定:可选参数后端不允许再出现必须参数
+
+function buildNames(firstName: string, lastName: string = 'Cat') {
+  return firstName + lastName
+}
+let tomcats = buildNames('tom', 'cat')
+let tomss = buildNames('tom')
+
+//给定默认值就不会受限制了
+
+// 如果是第一个参数是可选参数呢
+function buildNamess(firstName: string = 'Tom', lastName: string) {
+  return firstName + lastName
+}
+
+let tomCaat = buildNamess('tom', 'cat')
+let catsss = buildNamess(undefined, 'Cat')
+
+function push(array: any[], ...item: any[]): any[] {
+  item.forEach(e => {
+    array.push(item)
+  })
+  return array
+}
+
+let a: any[] = []
+push(a, 1, 2, 3, 4)
+
+function reverse(x:number|string): number | string {
+  if (typeof x === 'number') {
+    return Number(x.toString().split('').reverse().join())
+  } else if (typeof x === 'string'){
+    return x.split('').reverse().join()
+  }
+}
 
 
