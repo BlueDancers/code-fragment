@@ -226,3 +226,45 @@ document.addEventListener('click', () => {
   // .....
 })
 
+
+//typescript核心库文件已经将一些常用的方法做了判断工作
+Math.pow(1,2) // 在api里面明确说明了的函数,估计ts里面都做了判断
+document.addEventListener('click', e => {
+  // console.log(e.targetCurrent); // 就会报错 ,因为e里面没有这个属性
+})
+
+/* 
+interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
+    addEventListener(type: string, listener: (ev: MouseEvent) => any, useCapture?: boolean): void;
+}
+*/
+
+// 类型别名
+type Name = string
+type NameResolver = () => string
+type NameOrResolver = Name | NameResolver;
+function getNamesss(n: NameOrResolver): Name {
+  if (typeof n === 'string') {
+    return n
+  } else {
+    return n()
+  }
+}
+
+// ?????????? 看不懂 啥意思
+
+// 字符串字面量类型
+// 字符串字面量类型用来约束取值只能是后几个字符串中的一个
+
+type EventNames = 'click'| 'scroll'| 'mousemove'
+function handEvent(ele:HTMLElement, event: EventNames) {
+  // .....
+}
+
+handEvent(document.body, 'click')
+// handEvent(document.body, 'dbclick') // 报错
+
+// 上面的例子,我们使用了一个字符串字面量类型 EventNames
+// 他只能取三个中间的一个
+
+// 类型别名与字符串字面量都是使用type进行定义的
