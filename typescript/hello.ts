@@ -142,12 +142,87 @@ function push(array: any[], ...item: any[]): any[] {
 let a: any[] = []
 push(a, 1, 2, 3, 4)
 
-function reverse(x:number|string): number | string {
+function reverse(x: number | string): number | string {
   if (typeof x === 'number') {
-    return Number(x.toString().split('').reverse().join())
-  } else if (typeof x === 'string'){
-    return x.split('').reverse().join()
+    return Number(
+      x
+        .toString()
+        .split('')
+        .reverse()
+        .join('')
+    )
+  } else if (typeof x === 'string') {
+    return x
+      .split('')
+      .reverse()
+      .join('')
+  }
+  return 0
+}
+
+// 存在缺点 ,也就是不能精准表达 ,输入数字,输出也就是数字 输入字符串 输入字符串
+//我们可以重载定义多个reverse的函数类型
+
+function reverses(x: number): number
+function reverses(x: string): string
+function reverses(x: number | string): string | number {
+  if (typeof x === 'number') {
+    return x
+      .toString()
+      .split('')
+      .reverse()
+      .join()
+  } else if (typeof x === 'string') {
+    return x
+      .split('')
+      .reverse()
+      .join()
+  }
+  return 0
+}
+
+//断言
+
+// function getLength(someThing:string | number) {
+//   return someThing.length
+// }
+// length不属于共有属性 所以会报错
+/* 有时候,我们确实需要在还不确定类型的时候就访问其中一个类型的属性或方法 ,
+  就要将something的类型断言成string
+*/
+function getLength(something: string | number) {
+  if ((<string>something).length) {
+    return (<string>something).length
+  } else {
+    return something.toString().length
   }
 }
 
+// 断言不是类型的转换,是类型的强制判断(个人理解)
+function toBoolean(something: string | number): boolean {
+  // return <boolean>something
+  return typeof something == 'number' ? true : false
+}
+
+// 声明文件 也就是在ts里面使用其他的一些变量的时候,需要进行声明,因为ts不认识
+
+declare var jQuery: (selector: string) => any
+
+//通常会将类型声明放在单独的文件夹里面,也就是声明文件
+// 约定声明文件以.d.ts结尾
+
+// 内置对象
+let bs: Boolean = new Boolean(1)
+let es: Error = new Error('Error occurred')
+let ds: Date = new Date()
+let rs: RegExp = /[a-z]/
+
+
+// dom 和 bom 的内置对象
+
+let body: HTMLElement = document.body
+let allDiv: NodeList = document.querySelectorAll('div')
+document.addEventListener('click', () => {
+  // .....
+})
 
