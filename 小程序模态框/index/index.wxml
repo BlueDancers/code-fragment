@@ -1,0 +1,13 @@
+<button class="show-btn">弹窗</button>
+ <!-- wx:if="{{showModal}}" -->
+<view class="modal-mask" bindtap='hideModal' catchtouchmove='preventTouchMove' wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+  <view class="modal-title">温馨提示</view>
+  <view class='modal-content'>
+    这是一个模态框
+  </view>
+  <view class="modal-footer">
+    <button class="btn-cancel"  bindtap='onCancel' data-status="cancel">取消</button>
+    <button class='btn-confirm' bindtap='onConfirm' data-status="confirm">确定</button>
+  </view>
+</view>
