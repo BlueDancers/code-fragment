@@ -70,10 +70,9 @@ Page({
 
     // 绘制圆环
     cvsCtx.beginPath();
-    cvsCtx.setLineWidth(6);
+    cvsCtx.setLineWidth(6); // 设置边的宽度
     cvsCtx.setStrokeStyle('#ffffff');
     cvsCtx.setLineCap('round');
-    let end = 
     cvsCtx.arc(200, 200, 40, 1.5 * Math.PI, (num * Math.PI -0.2 * Math.PI), true);
     cvsCtx.stroke();
     cvsCtx.draw();

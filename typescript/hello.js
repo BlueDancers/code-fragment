@@ -16,3 +16,9 @@ function alertName() {
 var NNN = 'seven';
 NNN = 7;
 console.log(NNN.fileName);
+var myFavoriteNumber;
+myFavoriteNumber = 'server';
+myFavoriteNumber = 7;
+function getLength(something) {
+    return something.toString();
+}
