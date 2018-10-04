@@ -14,6 +14,17 @@
     overflow: hidden;
     z-index: 1000;
     color: #ffffff;
+    opacity: 0;
+    animation: isShow 0.5s ease 0s 1 normal forwards;
+    
+}
+@keyframes isShow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.5;
+    }
 }
 
 .modal-dialog {
@@ -26,8 +37,18 @@
     background-color: #f9f9f9;
     margin: -180rpx 105rpx;
     border-radius: 18rpx;
+    opacity: 0;
+    animation: isModalShow 1s ease-out 0s 1 normal forwards;
 }
 
+@keyframes isModalShow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 .modal-title {
     padding-top: 50rpx;
     font-size: 36rpx;

@@ -9,8 +9,6 @@ Page({
       showModal: false
   },
   hideModal () {
-    console.log(1123);
-    
     this.SwitchDialog()
   },
   SwitchDialog () { // 切换显示隐藏
@@ -18,6 +16,12 @@ Page({
       showModal: !this.data.showModal
     })
   },
+  onCancel () {
+    this.SwitchDialog()
+  },
+  onConfirm () {
+    this.SwitchDialog()
+  }, 
   preventTouchMove () {
     // .. 存在的意义 == > 弹出框蒙版截断touchmove事件 
   },
