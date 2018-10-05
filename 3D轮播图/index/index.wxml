@@ -1,0 +1,7 @@
+<swiper class="imageContainer" bindchange="handleChange" previous-margin="{{previousMargin}}" next-margin="{{nextMargin}}" circular="circular" autoplay="{{autoplay}}">
+  <block wx:for="{{3}}" wx:key="{{index}}">
+    <swiper-item>
+      <image class="itemImg {{currentIndex == index ? 'active': 'no-active'}}" src="../image/banner.png"></image>
+    </swiper-item>
+  </block>
+</swiper>

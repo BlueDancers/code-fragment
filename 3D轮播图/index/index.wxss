@@ -1,0 +1,17 @@
+/* carousel/index.wxss */
+.imageContainer{
+  height: 400rpx;
+}
+.itemImg{
+  position: absolute;
+  width: 100%;
+  height: 268rpx;
+}
+.active{
+  z-index: 10;
+  transition:all .2s ease-in 0s;
+}
+.no-active {
+  transform: scale(0.8);
+  z-index: 5;
+}
