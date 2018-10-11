@@ -1,0 +1,17 @@
+{
+  "name": "koa2-1.0.0",
+  "version": "1.0.0",
+  "description": "koa2这个也算是最喜欢的一个node框架了,使用的比较多.总是搭建初始环境,浪费时间,这里存储一个初始化完成的koa2环境",
+  "main": "app.js",
+  "dependencies": {
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "koa2": "^2.0.0-alpha.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
