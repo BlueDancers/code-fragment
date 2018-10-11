@@ -14,9 +14,7 @@ schema : 数据模型层 被models层 请求 请求 数据库
 
 大致是这样的
 
-![](D:\vkcyan\github\Small-code\koa2 初始环境\one.png)
-
-
+![](https://s1.ax2x.com/2018/10/11/5TpsMz.png)
 
 
 
