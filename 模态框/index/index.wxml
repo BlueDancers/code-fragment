@@ -1,13 +1,20 @@
+<<<<<<< HEAD
 <button class="show-btn" bindtap="hideModal">弹窗</button>
  <!-- wx:if="{{showModal}}" -->
 <view class="{{showModal?'modal-mask':''}}" bindtap='hideModal' catchtouchmove='preventTouchMove' wx:if="{{showModal}}"></view>
 <view class="{{showModal?'modal-dialog':''}}" wx:if="{{showModal}}">
+=======
+<button class="show-btn" bindtap='hideModal'>弹窗</button>
+ <!-- wx:if="{{showModal}}" -->
+<view class="modal-mask"  catchtouchmove='preventTouchMove' wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+>>>>>>> 7dc5ca9aaa0090cd92a11d985fd66adc4af1d86d
   <view class="modal-title">温馨提示</view>
   <view class='modal-content'>
     这是一个模态框
   </view>
   <view class="modal-footer">
-    <button class="btn-cancel"  bindtap='onCancel' data-status="cancel">取消</button>
+    <button class="btn-cancel"  bindtap='onCancel' data-status="cancel">取消</button>  
     <button class='btn-confirm' bindtap='onConfirm' data-status="confirm">确定</button>
   </view>
 </view>

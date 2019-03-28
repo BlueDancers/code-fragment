@@ -15,7 +15,13 @@
     overflow: hidden;
     z-index: 1000;
     color: #ffffff;
+<<<<<<< HEAD
     animation: isShow 0.2s ease 0s 1 normal forwards;
+=======
+    opacity: 0;
+    animation: isShow 0.3s ease 0s 1 normal forwards;
+    
+>>>>>>> 7dc5ca9aaa0090cd92a11d985fd66adc4af1d86d
 }
 @keyframes isShow {
     from {
@@ -27,16 +33,17 @@
 }
 
 .modal-dialog {
-    width: 540rpx;
+    width: 600rpx;
     overflow: hidden;
     position: fixed;
     top: 50%;
     left: 0;
     z-index: 10000;
     background-color: #f9f9f9;
-    margin: -180rpx 105rpx;
+    margin: -180rpx 75rpx;
     border-radius: 18rpx;
     opacity: 0;
+<<<<<<< HEAD
     animation: isShowModal 0.4s ease 0s 1 normal forwards;
 }
 
@@ -47,8 +54,19 @@
     to {
         opacity: 1;
     }
+=======
+    animation: isModalShow 0.5s ease-out 0s 1 normal forwards;
+>>>>>>> 7dc5ca9aaa0090cd92a11d985fd66adc4af1d86d
 }
 
+@keyframes isModalShow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 .modal-title {
     padding-top: 50rpx;
     font-size: 36rpx;
@@ -58,12 +76,13 @@
 
 .modal-content {
     padding: 50rpx 32rpx;
+    text-align: center;
 }
 
 .modal-footer {
     display: flex;
     align-items: center;
-    height: 90rpx;
+    height: 100rpx;
     font-size: 34rpx;
     line-height: 86rpx;
     border-top: 1rpx solid #dedede;
@@ -82,7 +101,7 @@
 .btn-confirm {
     width: 50%;
     line-height: 90rpx;
-    color: #ec5300;
+    color: #F8B62D;
     text-align: center;
     border-radius: 0;
     border: none;
