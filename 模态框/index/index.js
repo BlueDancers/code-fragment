@@ -9,8 +9,6 @@ Page({
       showModal: false
   },
   hideModal () {
-    console.log(1123);
-    
     this.SwitchDialog()
   },
   SwitchDialog () { // 切换显示隐藏
@@ -20,6 +18,13 @@ Page({
   },
   preventTouchMove () {
     // .. 存在的意义 == > 弹出框蒙版截断touchmove事件 
+  },
+  onCancel () {
+    console.log('取消')
+    this.SwitchDialog()
+  },
+  onConfirm () {
+    console.log('确认')
   },
   /**
    * 生命周期函数--监听页面加载
