@@ -1,31 +1,37 @@
-## jQuery实现的无缝轮播
+## jQuery实现的无缝轮播（兼容到IE10）
+
+![](http://www.vkcyan.top/FrfROjvz74zYukBzbmIhY7tLgnrG.gif)
+
+> 兼容IE11，IE10
+
+最近在维护公司一个比较老的项目，本来是不想写这个的，但是网上的插件真的是一言难尽，bug太多了，本来想躲个懒，结果花了更多时间
+
+![](http://www.vkcyan.top/FpnGyIU52pqPnQBVzOuMxcp4AnLv.png)
 
 
 
-最近在维护公司一个比较老的项目,本来是不想写这个的,但是网上的插件真的是不咋地,bug太多了,只能使用我渣渣的jQuery水平来写一个轮播了
+## 正题
 
-**传统的轮播图与MVVM的轮播图,的实现思路是不一样的**
+**传统的轮播图与MVVM的轮播图的实现思路是不一样的**
 
+类似于Vue，我们只关心数据的变化，在显示隐藏过程中添加过渡动画，达到完全不涉及dom，轻松完成轮播组件
 
+但是传统的轮播图不是这样的，因为涉及到dom的操作，思路发生的了变化
 
-类似于Vue,我们只关心数据的显示隐藏,在显示隐藏过程中添加过渡动画,达到完全不涉及dom的操作
-
-但是传统的轮播图不是这样的,因为涉及到dom的操作,思路发生的变化
-
-大致思路是这样的
+本文的大致思路是这样的
 
 1. 获取图片数量
 2. 获取图片宽度
 3. 定义图片索引
 4. 动态渲染轮播图导航
-5. (核心)rotate方法进行索引的切换,同时使用animate()进行`索引`*`图片宽度`的偏移
+5. (核心)rotate方法进行索引的切换，同时使用animate()进行`索引`*`图片宽度`的偏移
 6. 启动定时器
 7. 添加下标点击事件
 8. 添加左右点击事件
 
 
 
-> html 没什么好说的,就是图片列表
+> html 没什么好说的，就是图片列表
 
 ```html
 <!DOCTYPE html>
@@ -33,20 +39,20 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width， initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="./carousel_bate.css">
-  <title>jQuery轮播图</title>
+  <title>Document</title>
 </head>
+
 <body>
   <div class="carousel-conatiners">
     <div class="carousel">
-       <!-- img应为后端动态渲染 -->
-      <img src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
-      <img src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
-      <img src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
-      <img src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
-      <img src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
+      <img class="carousel_img" src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
+      <img class="carousel_img" src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
+      <img class="carousel_img" src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
+      <img class="carousel_img" src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
+      <img class="carousel_img" src="http://www.vkcyan.top/FgbA0ptti6uF-9Rf5X6zC1VWVrnN.png" alt="">
     </div>
     <!-- 底部小icon动态渲染 -->
     <div class="iconbox"></div>
@@ -61,19 +67,19 @@
   <script src="jquery.1.7.2.js"></script>
   <script src="./carousel_bate.js"></script>
 </body>
+
 </html>
 ```
 
 
 
-> js部分还是有一些坑的,后面再说
+> js部分还是有一些坑的，后面再说
 
 ```js
-$(document).ready(function () {
+$(document).ready(function() {
+  isIE()
   var imageBox = $('.carousel')[0] // 获取图片对象
   var imageNum = $(imageBox).children().size() // 获取图片数量
-  var iconBox = $('.iconbox')
-  var iconBoxList = iconBox.children()
   var nextId = 0 // 下一张图片的索引
   var delayTime = 3000 // 延迟时间
   var speed = 500 // 执行速度
@@ -81,12 +87,13 @@ $(document).ready(function () {
   // 根据数量动态渲染icon
   var iconNum = 0 // 记录icon数量
   while (imageNum > iconNum) {
-    $('.iconbox').append(`<span class="carousel-icon" rel=${iconNum}></span>`)
+    // $('.iconbox').append(`<span class="carousel-icon" rel=${iconNum}></span>`)
+    //ei11以下不支持模板字符串
+    $('.iconbox').append("<span class='carousel-icon' rel=" + iconNum + '></span>')
     iconNum++
   }
-  var rotate = function (clickId) {
+  var rotate = function(clickId) {
     if (clickId != undefined) {
-      console.log(clickId);
       if (clickId + 1 > imageNum) {
         nextId = 0
       } else if (clickId < 0) {
@@ -102,44 +109,52 @@ $(document).ready(function () {
         nextId++
       }
     }
-    $(iconBox).children().removeClass('active') // 参数当前存在的active下标
-    var activeChildren = $(iconBox).children()[nextId]
+    $('.iconbox').children().removeClass('active') // 参数当前存在的active下标
+    var activeChildren = $('.iconbox').children()[nextId]
     $(activeChildren).addClass('active') // 给当前的下标加class
 
     $(imageBox).animate({
-      left: `-${nextId*$(imageBox).width() +5}px`
-    }, speed)
+        // left: `-${nextId*$(imageBox).width() +2}px`
+        left: '-' + nextId * $('.carousel_img').width() + 'px'
+      }，speed)
   }
-  // 初始化解决方法
-  // 1. 运行一次rotate函数 让其初始化
-  // 2. 给 iconbox 这个class第一个子元素添加 active 
+  // 初始化 1. 运行一次rotate函数 让其初始化 2. 给  iconbox  这个class第一个子元素添加 active
   rotate()
-  intervalId = setInterval(rotate, delayTime); // 开启轮播
-
-  iconBox.children().each(function (index, val) { // 下标点击事件
-    $(this).click(function (e) {
+  intervalId = setInterval(rotate， delayTime) // 开启轮播
+// 下标点击事件
+  $('.iconbox').children().each(function(index) {
+    $(this).click(function(e) {
       clearInterval(intervalId) // 清除定时器
       rotate(index) // 手动指定跳转
-      intervalId = setInterval(rotate, delayTime); // 再次启动定时器
+      intervalId = setInterval(rotate， delayTime) // 再次启动定时器
     })
   })
-  // 先左滑动
-  $('.carousel-left').click(function () {
+  // 左右滑动事件
+  $('.carousel-left').click(function() {
     clearInterval(intervalId) // 清除定时器
     rotate(--nextId)
-    intervalId = setInterval(rotate, delayTime); // 再次启动定时器
+    intervalId = setInterval(rotate， delayTime) // 再次启动定时器
   })
-  $('.carousel-right').click(function () {
+  $('.carousel-right').click(function() {
     clearInterval(intervalId) // 清除定时器
     rotate(++nextId)
-    intervalId = setInterval(rotate, delayTime); // 再次启动定时器
+    intervalId = setInterval(rotate， delayTime) // 再次启动定时器
   })
+  // 对ie浏览器进行特殊处理
+  function isIE() {
+    if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+      $('.carousel_img').css('width'， $(window).width())
+      $('.carousel').css('width'， '1000%')
+    } else {
+      console.log('不是ie不作处理')
+    }
+  }
 })
 ```
 
 
 
-> css 部分除了固定的布局,就是需要保证图片是一行排列的,其他的例如 轮播导航 左右切换 很好调整
+> css 部分除了固定的布局，就是需要保证图片是一行排列的，其他的例如 轮播导航 左右切换 很好调整
 
 ```css
 * {
@@ -150,9 +165,9 @@ $(document).ready(function () {
 .carousel-conatiners {
   position: relative;
   width: 100%;
-  height: 450px;
+  height: 380px;
   overflow: hidden;
-  float: left;
+  margin-top: 10px;
 }
 
 .carousel {
@@ -161,18 +176,21 @@ $(document).ready(function () {
   top: 0px;
   left: 0px;
   height: 400px;
+  width: 100%;
 }
 
-.carousel img {
-  width: 100%;
-  display: block;
+.carousel_img {
   float: left;
+  display: block;
+  height: 360px;
+  width: 100%;
+  cursor: pointer;
 }
 
 .iconbox {
   position: absolute;
   bottom: 0px;
-  height: 50px;
+  height: 20px;
   width: 100%;
   color: black;
   display: flex;
@@ -180,63 +198,92 @@ $(document).ready(function () {
 }
 
 .carousel-icon {
-  margin: 10px 20px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-color: black;
+  display: block;
+  cursor: pointer;
+  margin: 10px 20px 0px 10px;
+  width: 30px;
+  height: 10px;
+  background: rgba(206， 206， 206， 1);
+  border-radius: 5px;
 }
 
 .active {
-  background-color: brown;
+  background-color: black;
 }
 
 .carousel-left {
   cursor: pointer;
-  transform: translate(0, -50%);
+  transform: translate(0， -50%);
   margin-top: -25px;
-  margin-left: 20px;
+  margin-left: 23%;
   position: absolute;
   top: 50%;
   left: 0;
+  width: 40px;
+  height: 120px;
+  background: rgba(255， 255， 255， 1);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.carousel-left img {
+  display: inline-block;
+  width: 14px;
+  height: 45px;
+}
+
+.carousel-right img {
+  width: 14px;
+  height: 45px;
 }
 
 .carousel-right {
   cursor: pointer;
-  transform: translate(0, -50%);
+  transform: translate(0， -50%);
   margin-top: -25px;
-  margin-right: 20px;
+  margin-right: 23%;
   position: absolute;
   top: 50%;
   right: 0;
+  width: 40px;
+  height: 120px;
+  background: rgba(255， 255， 255， 1);
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.carousel-conatiners:hover .carousel-left，
+.carousel-conatiners:hover .carousel-right {
+  opacity: 0.5;
+}
+
+.carousel-left:hover，
+.carousel-right:hover {
+  opacity: 0.8;
 }
 ```
 
-效果为这样
-
-![](http://www.vkcyan.top/lij-mDT_POB0AnW4cEW6O9WlezBz.gif)
 
 
 
 
+## 后话
 
-遇到的问题
-
-1. 浏览器窗口大小调整,导致轮播图发生错乱
-
-解决方法:
-
-​	最开始写的时候,我在初始化的获取了宽度,所以这个宽度变量是定值,于是就会出现浏览器窗口发生变化的时候,动画偏移还是最初的宽度,就会发生错乱的情况,所以,这些随时可能变化的值,就不能用变量去初始化,在每次切换的时候动态获取轮播图宽度
-
-````JavaScript
- $(imageBox).animate({
-   left: `-${nextId*$(imageBox).width() +5}px`
- }, speed)
-````
+面对不兼容ie的问题，因为IE会默认对flex布局内的100%宽度进行相对父元素的宽度平分，所以对ie需要进行特殊的处理，当然不能为了ie动已经完成的css，所以，我们判断当前浏览器时候是ie，进行轮播图父元素的宽度增加，这样ie就也显示正常了(ie10以下不支持flex布局)
 
 
 
-代码写的比较急,所以有很多可以优化的地方,如果各位需要的话,有空可以优化一下,顺便加上手势拖动效果
+### 仓库地址
+
+[github](https://github.com/vkcyan/Small-code/tree/master/jquery%E7%9A%84%E8%BD%AE%E6%92%AD%E5%9B%BE(%E4%B8%8D%E6%94%AF%E6%8C%81%E6%89%8B%E5%8A%BF))
+
+
 
 
 
