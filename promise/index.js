@@ -1,11 +1,13 @@
-let Wpromise = require('./simple')
+let Wpromise = require('./simple.3');
 
 new Wpromise((resolve, reject) => {
-  setTimeout(() => {
-    resolve('成功')
-  }, 1000);
-}).then(res => {
-  console.log(res);
-}, res => {
-  console.log('失败', res);
-})
+  resolve('成功');
+}).then(
+  res => {
+    console.log(res);
+    return 111;
+  },
+  res => {
+    console.log('失败', res);
+  }
+);
