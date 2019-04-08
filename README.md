@@ -1,16 +1,9 @@
-## demo存放区
+## 零碎项目存放区
 
-对学习的进行小功能的实现
+此仓库会存放一些日常代码片段
 
-在启动项目之前 一般都是
+或者小demo
 
-#####Small demo koa mongdb
+亦或者源码解读的代码
 
-```bash
-npm install
-cd data
-node data
-```
-
-
-
+希望可以帮助到你😃
