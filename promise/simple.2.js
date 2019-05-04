@@ -2,6 +2,9 @@ const pending = 'pending';
 const resolved = 'resolved';
 const rejected = 'rejected';
 
+/**
+ * 实现异步调用
+ */
 class Wpromise {
   /**
    * @param {Object} fn 附带(resolve,reject) 的实例

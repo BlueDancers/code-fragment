@@ -2,7 +2,7 @@ const pending = 'pending';
 const resolved = 'resolved';
 const rejected = 'rejected';
 /**
- * 实现链式调用
+ * 处理值穿透问题
  */
 class Wpromise {
   /**
@@ -36,7 +36,26 @@ class Wpromise {
       reject(error);
     }
   }
+  /**
+   *
+   *
+   * @param {Function} onFulfilledCallbacks then(res => {}) // 第一个回调函数
+   * @param {Function} onRejectedCallvacks then(()=>(), err=> {}) // 第二个回调函数
+   * @returns
+   * @memberof Wpromise
+   */
   then(onFulfilledCallbacks, onRejectedCallvacks) {
+    onFulfilledCallbacks =
+      typeof onFulfilledCallbacks === 'function'
+        ? onFulfilledCallbacks
+        : y => y;
+    // y => y 意思为 y => {return y} // 当then中不存在函数的时候,我们就需要手动的返回上层的值 在实际函数中就是 .then(res => {return res})
+
+    typeof onRejectedCallvacks === 'function'
+      ? onRejectedCallvacks
+      : e => {
+          throw e;
+        };
     let Wpromise2;
     if (this.status === pending) {
       Wpromise2 = new Wpromise((resolve, reject) => {
@@ -60,6 +79,7 @@ class Wpromise {
       Wpromise2 = new Wpromise((resolve, reject) => {
         try {
           let res = onFulfilledCallbacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
+          console.log('处理值', res);
           handlePromise(Wpromise, res, resolve, reject);
         } catch (e) {
           reject(e);

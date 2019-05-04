@@ -2,6 +2,9 @@ const pending = 'pending';
 const resolved = 'resolved';
 const rejected = 'rejected';
 
+/**
+ * 实现promise的基本模型
+ */
 class Wpromise {
   constructor(fn) {
     this.status = pending;
