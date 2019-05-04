@@ -16,7 +16,7 @@ class Wpromise {
     let resolve = value => {
       if (this.status === pending) {
         this.value = value;
-        this.status = resolved;
+        this.status = resolved; // 等到回调的数据得到后,在去执行异步的回调函数
         this.successStore.forEach(fnc => fnc());
       }
     };
@@ -37,18 +37,27 @@ class Wpromise {
   then(onFulfilledCallbacks, onRejectedCallvacks) {
     let Wpromise2;
     if (this.status === pending) {
-      this.successStore.push(() => {
-        onFulfilledCallbacks(this.value);
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        // 判断是否需要传递promise
+        try {
+          this.successStore.push(() => {
+            let res = onFulfilledCallbacks(this.value);
+            handlePromise(Wpromise2, res, resolve, reject);
+          });
+          this.failStore.push(() => {
+            let res = onRejectedCallvacks(this.reason);
+            handlePromise(Wpromise2, res, resolve, reject);
+          });
+        } catch (e) {
+          reject(e);
+        }
       });
-
-      this.failStore.push(() => {
-        onRejectedCallvacks(this.reason);
-      });
+      // 当为等待状态的时候,就存储当前的回调函数 当状态发生变化后再执行 达到同步的效果
     }
     if (this.status === resolved) {
       Wpromise2 = new Wpromise((resolve, reject) => {
         try {
-          let res = onFulfilledCallbacks(this.value);
+          let res = onFulfilledCallbacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
           handlePromise(Wpromise, res, resolve, reject);
         } catch (e) {
           reject(e);
@@ -58,12 +67,54 @@ class Wpromise {
     if (this.status === rejected) {
       onRejectedCallvacks(this.reason);
     }
+    return Wpromise2; //返回新的promise
   }
 }
 
+/**
+ * 拓展promise的作用域链 开启链式调用
+ * @param {Function} Wpromise2 promise原型
+ * @param {String} res 返回值
+ * @param {Function} resolve 成功回调
+ * @param {Function} reject 失败回调
+ */
 function handlePromise(Wpromise2, res, resolve, reject) {
-  console.log(Wpromise2, res, resolve, reject);
-  // 后面再写吧
+  if (Wpromise2 == res) {
+    // Wpromise 是否等于res,也就是判断是否将返回本身
+    return reject(new TypeError('不能抛出本身'));
+  }
+  // 假如是函数的情况下
+  if (res !== null && (typeof res === 'object' || typeof res === 'function')) {
+    let called; // called控制resolve或reject只能执行一次,多次调用没有用
+    try {
+      let { then } = res;
+      if (typeof then === 'function') {
+        // then(res, onFulfilled, onRejected)
+        // res 中的this.status是then里面需要的
+        // y这个方法传到,then函数里面去就变成了function 在then再使用这个function并把value值传进来
+        then.call(
+          res,
+          y => {
+            if (called) return;
+            handlePromise(Wpromise2, y, resolve, reject);
+          },
+          r => {
+            if (called) return;
+            called = true;
+            reject(r);
+          }
+        );
+      }
+    } catch (error) {
+      // 假如
+      if (called) return;
+      called = true;
+      reject(error);
+    }
+  } else {
+    //不是异步的情况下 不存在reject对象 直接resolve就可以了
+    resolve(res);
+  }
 }
 
 module.exports = Wpromise;

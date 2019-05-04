@@ -89,7 +89,7 @@ new Wpromise((resolve, reject) => {
 解决方案
 
 1. then里面需要处理 "pending"状态的处理
-2. 保存 .then 里面的回调信息,因为不知道什么时候会用到
+2. 保存 .then 里面的回调信息,等到异步结束的时候进行调用
 3. 在resolve reject中对保存的回调信息进行处理
 
 
@@ -183,9 +183,145 @@ new Wpromise((resolve, reject) => {
 
 第三版本(支持链式调用)
 
+源码实现非常巧妙,也比较复杂,核心就是使用call来进行then的递归调用 实现链式.then的调用
 
 
 
+基本思路如下: 
+
+1. 在`.then`的时候判断当前状态值 假设为`resolved` 获取当前promise中的`this.value`也就是返回值
+2. 将成功回调进行再次Promise处理,并进行链式调用处理,最后返回这个Promise对象,以便于下次调用
+3. 如果`.then`是同步的直接`resolve`,便于后面的`.then`调用
+4. 如果`.then`是异步的,这进行手动.then处理,同时将当前this传递进去,再次进行promise处理,直到异步完成,执行resolve方法
+
+**看起来肯定很绕,因为实现起来就是这么绕...**
+
+![](http://www.vkcyan.top/FvIyA12Vcan-N3pET5S5EmBT_wjZ.png)
+
+
+
+```JavaScript
+const pending = 'pending';
+const resolved = 'resolved';
+const rejected = 'rejected';
+
+class Wpromise {
+  /**
+   * @param {Object} fn 附带(resolve,reject) 的实例
+   */
+  constructor(fn) {
+    this.status = pending;
+    this.value = null;
+    this.reason = null;
+    this.successStore = [];
+    this.failStore = [];
+
+    let resolve = value => {
+      if (this.status === pending) {
+        this.value = value;
+        this.status = resolved; // 等到回调的数据得到后,在去执行异步的回调函数
+        this.successStore.forEach(fnc => fnc());
+      }
+    };
+
+    let reject = reason => {
+      if (this.status === pending) {
+        this.reason = reason; //
+        this.status = rejected;
+        this.failStore.forEach(fnc => fnc());
+      }
+    };
+    try {
+      fn(resolve, reject);
+    } catch (error) {
+      reject(error);
+    }
+  }
+  then(onFulfilledCallbacks, onRejectedCallvacks) {
+    let Wpromise2;
+    if (this.status === pending) {
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        // 判断是否需要传递promise
+        try {
+          this.successStore.push(() => {
+            let res = onFulfilledCallbacks(this.value);
+            handlePromise(Wpromise2, res, resolve, reject);
+          });
+          this.failStore.push(() => {
+            let res = onRejectedCallvacks(this.reason);
+            handlePromise(Wpromise2, res, resolve, reject);
+          });
+        } catch (e) {
+          reject(e);
+        }
+      });
+      // 当为等待状态的时候,就存储当前的回调函数 当状态发生变化后再执行 达到同步的效果
+    }
+    if (this.status === resolved) {
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        try {
+          let res = onFulfilledCallbacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
+          handlePromise(Wpromise, res, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
+    }
+    if (this.status === rejected) {
+      onRejectedCallvacks(this.reason);
+    }
+    return Wpromise2; //返回新的promise
+  }
+}
+
+/**
+ * 拓展promise的作用域链 开启链式调用
+ * @param {Function} Wpromise2 promise原型
+ * @param {String} res 返回值
+ * @param {Function} resolve 成功回调
+ * @param {Function} reject 失败回调
+ */
+function handlePromise(Wpromise2, res, resolve, reject) {
+  if (Wpromise2 == res) {
+    // Wpromise 是否等于res,也就是判断是否将返回本身
+    return reject(new TypeError('不能抛出本身'));
+  }
+  // 假如是函数的情况下
+  if (res !== null && (typeof res === 'object' || typeof res === 'function')) {
+    let called; // called控制resolve或reject只能执行一次,多次调用没有用
+    try {
+      let { then } = res;
+      if (typeof then === 'function') {
+        // then(res, onFulfilled, onRejected)
+        // res 中的this.status是then里面需要的
+        // y这个方法传到,then函数里面去就变成了function 在then再使用这个function并把value值传进来
+        then.call(
+          res,
+          y => {
+            if (called) return;
+            handlePromise(Wpromise2, y, resolve, reject);
+          },
+          r => {
+            if (called) return;
+            called = true;
+            reject(r);
+          }
+        );
+      }
+    } catch (error) {
+      // 假如
+      if (called) return;
+      called = true;
+      reject(error);
+    }
+  } else {
+    //不是异步的情况下 不存在reject对象 直接resolve就可以了
+    resolve(res);
+  }
+}
+
+module.exports = Wpromise; 
+```
 
 
 
