@@ -181,7 +181,7 @@ new Wpromise((resolve, reject) => {
 
 
 
-第三版本(支持链式调用)
+### 第三版本(支持链式调用)
 
 源码实现非常巧妙,也比较复杂,核心就是使用call来进行then的递归调用 实现链式.then的调用
 
@@ -204,7 +204,9 @@ new Wpromise((resolve, reject) => {
 const pending = 'pending';
 const resolved = 'resolved';
 const rejected = 'rejected';
-
+/**
+ * 实现链式调用
+ */
 class Wpromise {
   /**
    * @param {Object} fn 附带(resolve,reject) 的实例
@@ -268,7 +270,14 @@ class Wpromise {
       });
     }
     if (this.status === rejected) {
-      onRejectedCallvacks(this.reason);
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        try {
+          let res = onRejectedCallvacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
+          handlePromise(Wpromise, res, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
     }
     return Wpromise2; //返回新的promise
   }
@@ -320,10 +329,114 @@ function handlePromise(Wpromise2, res, resolve, reject) {
   }
 }
 
-module.exports = Wpromise; 
+module.exports = Wpromise;
+
 ```
 
 
 
+### 第四版本(处理穿透值)
 
+当`then()`中不存在返回值的时候,我们就需要手动的传递存在返回值的地方
+
+正常情况下,`.then`是存在返回值的,来源于上层的`resolve`或者`.then`但是假如`.then`内函数为空,我们下面链式调用的`.then`就无法得到返回值,这时候我们就需要动态的添加返回值
+
+```JavaScript
+  /**
+   * @param {Function} onFulfilledCallbacks then(res => {}) // 第一个回调函数
+   * @param {Function} onRejectedCallvacks then(()=>(), err=> {}) // 第二个回调函数
+   * @returns
+   * @memberof Wpromise
+   */
+  then(onFulfilledCallbacks, onRejectedCallvacks) {
+    onFulfilledCallbacks =
+      typeof onFulfilledCallbacks === 'function'
+        ? onFulfilledCallbacks
+        : y => y;
+    // y => y 意思为 y => {return y} // 当then中不存在函数的时候,我们就需要手动的返回上层的值 在实际函数中就是 .then(res => {return res})
+
+    typeof onRejectedCallvacks === 'function'
+      ? onRejectedCallvacks
+      : e => {
+          throw e;
+        };
+  	// ...................
+  }
+```
+
+
+
+### 第五版本(添加catch方法)
+
+执行`.catch`方法也就是执行then的失败回调函数
+
+```JavaScript
+then(onFulfilledCallbacks, onRejectedCallvacks){
+    // ......
+}
+catch(onRejectedCallvacks) {
+  this.then(null, onRejectedCallvacks);
+}
+```
+
+使用实例
+
+````JavaScript
+new Wpromise((resolve, reject) => {
+  resolve('hello world');
+})
+  .then(res => {
+    console.log(res); //我们希望可以正常打印出hello world，如何处理呢？
+    return '穿透回调成功';
+  })
+  .then(
+    res => {
+      console.log(res);
+      return new Wpromise((resolve, reject) => {
+        //返回一个新的Promise
+        setTimeout(() => {
+          resolve('hello world');
+        }, 2000);
+      });
+    },
+    res => {
+      console.log(res);
+    }
+  )
+  .then(res => {
+    console.log('成功回调', res);
+  })
+  .catch(res => {
+    console.log('失败回调', res);
+  });
+
+````
+
+### 第六版本添加 (promise.resolve) 以及(Promise.reject)方法
+
+直接调用promise来执行回调函数,用于改变promise的回调函数状态
+
+所以我们手动在`.resolve`与`.reject`函数内进行new Promise的传值,就可以执行方法即可
+
+```JavaScript
+Wpromise.resolve = function(val) {
+  return new Wpromise((resolve, reject) => resolve(val));
+};
+Wpromise.reject = function(val) {
+  return new Wpromise((resolve, reject) => reject(val));
+};
+```
+
+使用
+
+```JavaScript
+let Wpromise = require('./simple.4');
+Wpromise.resolve('成功')
+  .then(result => {
+    console.log(result);
+  })
+  .catch(err => {
+    console.log(err);
+  });
+```
 

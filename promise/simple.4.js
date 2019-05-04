@@ -79,7 +79,6 @@ class Wpromise {
       Wpromise2 = new Wpromise((resolve, reject) => {
         try {
           let res = onFulfilledCallbacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
-          console.log('处理值', res);
           handlePromise(Wpromise, res, resolve, reject);
         } catch (e) {
           reject(e);
@@ -87,11 +86,27 @@ class Wpromise {
       });
     }
     if (this.status === rejected) {
-      onRejectedCallvacks(this.reason);
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        try {
+          let res = onRejectedCallvacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
+          handlePromise(Wpromise, res, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
     }
     return Wpromise2; //返回新的promise
   }
+  catch(onRejectedCallvacks) {
+    this.then(null, onRejectedCallvacks);
+  }
 }
+Wpromise.resolve = function(val) {
+  return new Wpromise((resolve, reject) => resolve(val));
+};
+Wpromise.reject = function(val) {
+  return new Wpromise((resolve, reject) => reject(val));
+};
 
 /**
  * 拓展promise的作用域链 开启链式调用

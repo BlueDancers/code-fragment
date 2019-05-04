@@ -5,27 +5,15 @@ new Wpromise((resolve, reject) => {
 })
   .then(
     res => {
-      console.log(res);
-      return new Promise((resolve, reject) => {
-        //返回一个新的Promise
-        setTimeout(() => {
-          reject('hello world');
-        }, 2000);
-      });
+      throw '报错了';
     },
-    res => {
-      console.log('失败', res);
-    }
+    res => {}
   )
   .then(
-    res => {
-      setTimeout(() => {
-        reject('hello world');
-      }, 2000);
-    },
+    res => {},
     res => {
       console.log('二次回调失败', res);
-      return new Promise((resolve, reject) => {
+      return new Wpromise((resolve, reject) => {
         //返回一个新的Promise
         setTimeout(() => {
           resolve('hello world');

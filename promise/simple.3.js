@@ -67,7 +67,14 @@ class Wpromise {
       });
     }
     if (this.status === rejected) {
-      onRejectedCallvacks(this.reason);
+      Wpromise2 = new Wpromise((resolve, reject) => {
+        try {
+          let res = onRejectedCallvacks(this.value); // 是then的返回值 可能为null 普通值 或者函数
+          handlePromise(Wpromise, res, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      });
     }
     return Wpromise2; //返回新的promise
   }
