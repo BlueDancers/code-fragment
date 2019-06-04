@@ -1,12 +1,10 @@
-const Koa = require('koa2')
-const response = require('koa-bodyparser')
-const router = require('./src/routes/routers')
+import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
+import router from './routers/router';
 
-const app = new Koa()
-app.use(response())
-app.listen(3000, () => {
-  console.log('[koa] is start');
-})
+const app = new Koa();
 
-app.use(router.routes())
-
+app.use(bodyParser()); // 解析request的body
+app.use(router.routes());
+app.listen(9000);
+console.log('app started at port 9000...');
