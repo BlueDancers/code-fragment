@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="./js_beta/router.js"></script>
+    <title>单页路由</title>
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 容器 -->
+    <a href="#/index?a=1">首页</a>
+    <a href="#/base?a=1">详情页</a>
+    <a href="#/other?a=1">其他页</a>
+    <a href="#/other?a=2">其他页</a>
+    <a href="#/test">同步测试页</a>
+    <div id="app">
+      默认文字
+    </div>
+  </body>
+  <script>
+    Router.beforeEach(transition => {
+      transition.next();
+    });
+    Router.afterEach(transition => {
+      console.log('后置', Router);
+    });
+    Router.set('/index', () => {
+      Router.sync(function() {
+        document.getElementById('app').innerHTML = '<p>首页</p>';
+      });
+    });
+    Router.set('/base', () => {
+      Router.async('data/base.js');
+    });
+    Router.set('/other', () => {
+      Router.async('data/other.js');
+    });
+    Router.set('/test', () => {
+      Router.sync(function() {
+        document.getElementById('app').innerHTML =
+          '<p style="color:#DD8C6F;">当前同步渲染详情页' +
+          JSON.stringify(Router.$router) +
+          '</p>';
+      });
+    });
+    Router.init();
+  </script>
+</html>
