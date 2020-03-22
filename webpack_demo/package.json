@@ -1,0 +1,14 @@
+{
+  "name": "webpack_demo",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "bundle": "webpack"
+  },
+  "author": "vkcyan",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
