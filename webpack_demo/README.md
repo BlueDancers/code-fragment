@@ -89,7 +89,7 @@ webpack默认支持打包js文件，但是如果碰到了`.js`文件之外的文
 
 
 
-### url-loader
+### 文件loader
 
 > 完全替代file-loader的loader，支持配置阈值一下的文件直接打包成为base64
 
@@ -112,4 +112,56 @@ webpack默认支持打包js文件，但是如果碰到了`.js`文件之外的文
     ]
   },
 ```
+
+
+
+### 样式loader
+
+> 在webpack配置中，loader是存在先后顺序的，按从后到前的顺序执行
+>
+> 例如scss 文件不可以前面就是css-loader，需要先解析模块成为css
+>
+> 对于css相关文件的打包处理
+>
+> style-loader：在 DOM 里插入一个 <style> 标签，并且将 CSS 写入这个标签内。
+>
+> css-loader 解析import进来的css文件
+
+```javascript
+   {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'] 
+        // 首先加载sass将scss文件进行打包处理为css文件，然后通过css-loader解析css文件，最后style-loader挂载dom结构
+      },
+```
+
+> postcss-loader 是一个css后置处理器，可以处理css编译后的代码
+
+```javascript
+// importLoaders：用于配置「css-loader 作用于 @import 的资源之前」有多少个 loader。
+// 
+{
+	loader: 'css-loader',
+	options: {
+		importLoaders: 2
+	}
+},
+```
+
+
+
+css模块化
+
+```javascript
+css模块开启
+{
+	loader: 'css-loader',
+	options: {
+		modules: true, // 开启模块化 开启后css名称就会变化，防止出现样式冲突
+		importLoaders: 2
+	}
+},
+```
+
+
 
