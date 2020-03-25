@@ -57,13 +57,30 @@ module.exports = {
   // mode: 'production', // 线上模式
   mode: 'development', // 开发模式
   entry: {
-    main: './src/index.js' // main就是打包入口
+    main: './src/index.js' // main就是打包入口 等价于 字符串写法
   }
  	......
 }
 ```
 
 
+
+### 补充
+
+entry可以进行多文件打包，将不同的js文件打包成自己配置的代码output
+
+```javascript
+entry: {
+	main: './src/index.js',
+	sub: './src/index.js'
+}, // 打包入口文件
+output: {
+	filename: '[name]_[hash].js', // 打包输出文件
+	path: path.resolve(__dirname, 'bundle') // 打包路径
+},
+```
+
+这里就可以分别进行打包，生成main_hash sub_main的js文件
 
 ## loader
 
@@ -164,4 +181,31 @@ css模块开启
 ```
 
 
+
+总结： module的loader主要用户打包不同文件，并通过主观控制来实现不同的打包方案
+
+
+
+## plugins
+
+html-webpack-plugin
+
+> webpack就是可以在webpack运行到某个时刻的时候，帮你做一些事情，例如htmlWebpackPlugin
+
+> 该插件主要帮助我们主动生成html文件，并把打包生成的js文件自动引入到html文件
+
+````javascript
+  plugins: [new htmlWebpackPlugin()]
+````
+
+> 指定html模板，会帮我们将打包的js文件通过script的方式注入到html里面
+
+```javascript
+ plugins: [
+    new htmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
+}
+```
 

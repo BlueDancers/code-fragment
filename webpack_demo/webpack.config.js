@@ -1,20 +1,26 @@
 /*
  * @Author: vkcyan
  * @Date: 2020-03-22 11:42:40
- * @LastEditTime: 2020-03-24 21:19:50
+ * @LastEditTime: 2020-03-25 11:54:39
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/webpack_demo/webpack.config.js
  */
 const path = require('path')
+const htmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   // mode: 'production', // 线上模式
   mode: 'development', // 开发模式
   entry: {
-    main: './src/index.js'
+    main: './src/index.js',
+    sub: './src/index.js'
   }, // 打包入口文件
-
+  output: {
+    filename: '[name]_[hash].js', // 打包输出文件
+    path: path.resolve(__dirname, 'bundle') // 打包路径
+  },
   module: {
     // 对不同模块进行打包
     rules: [
@@ -31,13 +37,22 @@ module.exports = {
         }
       },
       {
+        test: /\.(eot|ttf|svg|woff)$/, // 指定打包文件后缀
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[name]_[hash].[ext]',
+            outputPath: 'font/'
+          }
+        }
+      },
+      {
         test: /\.scss$/,
         use: [
           'style-loader',
           {
             loader: 'css-loader',
             options: {
-              modules: true,
               importLoaders: 2
             }
           },
@@ -47,8 +62,10 @@ module.exports = {
       }
     ]
   },
-  output: {
-    filename: 'bundle.js', // 打包输出文件
-    path: path.resolve(__dirname, 'bundle') // 打包路径
-  }
+  plugins: [
+    new CleanWebpackPlugin(),
+    new htmlWebpackPlugin({
+      template: './public/index.html'
+    })
+  ]
 }
