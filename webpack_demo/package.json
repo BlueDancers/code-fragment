@@ -10,7 +10,10 @@
   "author": "vkcyan",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.9.0",
     "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
     "express": "^4.17.1",

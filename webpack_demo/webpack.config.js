@@ -1,7 +1,7 @@
 /*
  * @Author: vkcyan
  * @Date: 2020-03-22 11:42:40
- * @LastEditTime: 2020-03-26 15:32:03
+ * @LastEditTime: 2020-03-26 16:24:10
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/webpack_demo/webpack.config.js
@@ -31,6 +31,11 @@ module.exports = {
   module: {
     // 对不同模块进行打包
     rules: [
+      {
+        test: /\.js$/,
+        exclude: '/node_modules/',
+        loader: 'babel-loader'
+      },
       {
         test: /\.(png|jpg|gif)$/, // 指定打包文件后缀
         use: {
