@@ -209,3 +209,92 @@ html-webpack-plugin
 }
 ```
 
+
+
+## SourceMap配置
+
+文档地址https://www.webpackjs.com/configuration/devtool/
+
+sourceMap:它是一个映射关系，他知道打包目录下main.js文件某一行出错了，实际上对应的src目录下的打包前的代码的某一行
+
+```
+inline： 将map文件直接打包到js中，不生成map文件，对速度提升不大
+cheap：字体是行里面的错误，不提示列，建议开启
+module： 会额外提示loader的错误，建议开启
+eval： 不会生成source-map，打包非常快，无法提供准确错误提示
+none： 不会生成source-map 不会生成映射，理论上最快
+
+打包测试
+eval 15s 6s
+source-map 18s 8s
+cheap-source-map 15s 6.8s
+cheap-module-eval-source-map 16s 7s
+
+开发环境建议使用 cheap-module-eval-source-map
+
+我个人认为，不应该在线上环境排查错误，所以使用none，
+```
+
+
+
+## WebpackDevServer配置
+
+### 监听打包
+
+监听文件，文件变化则打包代码
+
+```bash
+webpack --watch
+```
+
+很明显这样有很大的弊端，很显然是不满足开发需求的
+
+所以需要以这个内置服务来帮我们完成
+
+webpackdevserver就是一个node服务器，可以自己实现一下
+
+### 在node中使用webpack
+
+```javascript
+const express = require('express')
+const webpack = require('webpack')
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const config = require('./webpack.config')
+const complier = webpack(config)
+
+const app = express()
+app.use(
+  webpackDevMiddleware(complier, {})
+)
+app.listen(3000, () => {
+  console.log('express running')
+})
+```
+
+运行node文件就可以实现一个开发环境服务器，但是这个没有热更新的功能
+
+### WebpackDevServer
+
+#### contentBase
+
+devServer里面的contentBase表示的是告诉服务器从哪里提供内容。（也就是服务器启动的根目录，默认为当前执行目录，一般不需要设置）
+
+```javascript
+devServer: {
+	contentBase: './bundle', // 指定监听文件,一般情况下不需要写
+  hot: true, // 是否开启热更新
+  hotOnly: true // 启用热模块替换,而不会在构建失败的情况下进行页面刷新作为后备。
+},
+pulgins:[
+  //....
+  new webpack.HotModuleReplacementPlugin(), // 可以做到模块化替换 配合热更新使用
+  new webpack.NamedModulesPlugin() // 提示热更新的文件
+]
+```
+
+
+
+
+
+
+
