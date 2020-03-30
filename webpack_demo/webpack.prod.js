@@ -1,7 +1,7 @@
 /*
  * @Author: vkcyan
  * @Date: 2020-03-22 11:42:40
- * @LastEditTime: 2020-03-26 16:24:10
+ * @LastEditTime: 2020-03-30 21:36:07
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/webpack_demo/webpack.config.js
@@ -12,9 +12,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
-  // mode: 'production', // 线上模式
-  mode: 'development', // 开发模式
-  devtool: 'cheap-module-eval-source-map',
+  mode: 'production', // 线上模式
+  devtool: 'none',
   entry: {
     main: './src/index.js'
   }, // 打包入口文件
@@ -22,11 +21,6 @@ module.exports = {
     publicPath: '/',
     filename: '[name]_[hash].js', // 打包输出文件
     path: path.resolve(__dirname, 'bundle') // 打包路径
-  },
-  devServer: {
-    contentBase: './bundle', // 指定监听文件,一般情况下不需要写
-    hot: true, // 是否开启热更新
-    hotOnly: true // 启用热模块替换,而不会在构建失败的情况下进行页面刷新作为后备。
   },
   module: {
     // 对不同模块进行打包
@@ -83,8 +77,9 @@ module.exports = {
     new CleanWebpackPlugin(),
     new htmlWebpackPlugin({
       template: './public/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin(), // 可以做到模块化替换 配合热更新使用
-    new webpack.NamedModulesPlugin() // 提示热更新的文件
-  ]
+    })
+  ],
+  optimization: {
+    usedExports: true
+  }
 }

@@ -304,7 +304,32 @@ babel-loader，用来处理ES6语法，将其编译为浏览器可以执行的js
 @babel/preset-env插件。它可以根据开发者的配置，按需加载插件。减少打包大小
 ```
 
-webpack高级配置
+如果使用@babel/preset-env配合polyfill来做的话，会产生变量冲突
+
+#### @babel/preset-env
+
+将es6的代码转化为es5的代码
+
+#### @babel/polyfill
+
+@babel/polyfill主要是兼用低版本代码，例如promise模块，需要注入到进来进行低版本的兼容
+
+所以如果是库文件的应该使用 @babel/plugin-transform-runtime进行打包
+
+> 该转换器的另一个目的是为您的代码创建一个沙盒环境。如果直接导入core-js或@ babel / polyfill及其提供的内置程序（例如Promise，Set和Map），则这些将污染全局范围。
+
+当@babel/preset-env设置useBuiltIns为true的时候，不需要再页面里面引入@babel/polyfill了，否则会有一条警告
+
+```bash
+  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the `import '@babel/polyfill'` call or use `useBuiltIns: 'entry'` instead.
+```
+
+
+
+摇树优化
+
+> 摇树优化只支持es模块
 
 
 
