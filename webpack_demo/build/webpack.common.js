@@ -1,27 +1,25 @@
 /*
- * @Author: vkcyan
- * @Date: 2020-03-22 11:42:40
- * @LastEditTime: 2020-03-30 21:36:07
+ * @Author: your name
+ * @Date: 2020-03-31 18:18:03
+ * @LastEditTime: 2020-03-31 18:40:55
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
- * @FilePath: /code-fragment/webpack_demo/webpack.config.js
+ * @FilePath: /code-fragment/webpack_demo/webpack.common.js
  */
+
 const path = require('path')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const webpack = require('webpack')
-
 module.exports = {
-  mode: 'production', // 线上模式
-  devtool: 'none',
   entry: {
     main: './src/index.js'
   }, // 打包入口文件
   output: {
     publicPath: '/',
     filename: '[name]_[hash].js', // 打包输出文件
-    path: path.resolve(__dirname, 'bundle') // 打包路径
+    path: path.resolve(__dirname, '../bundle') // 打包路径
   },
+
   module: {
     // 对不同模块进行打包
     rules: [
@@ -66,7 +64,6 @@ module.exports = {
           'sass-loader'
         ] //首先加载style-loader 加载css的dom,然后加载css loader 准备css的解析 最后sass-loader 解析scss文件 完成解析
       },
-
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'] //首先加载style-loader 加载css的dom,然后加载css loader 准备css的解析 最后sass-loader 解析scss文件 完成解析
@@ -78,8 +75,5 @@ module.exports = {
     new htmlWebpackPlugin({
       template: './public/index.html'
     })
-  ],
-  optimization: {
-    usedExports: true
-  }
+  ]
 }

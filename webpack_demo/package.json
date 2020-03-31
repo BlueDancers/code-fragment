@@ -5,21 +5,24 @@
   "sideEffects": false,
   "scripts": {
     "bundle": "webpack --watch",
-    "dev": "webpack-dev-server --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "dev-build": "webpack --config ./build/webpack.dev.js",
+    "dev": "webpack-dev-server --config ./build/webpack.dev.js",
+    "build": "webpack --config ./build/webpack.prod.js",
     "serve": "node server.js"
   },
   "author": "vkcyan",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
   "devDependencies": {
-    "core-js": "^3.6.4",
     "@babel/core": "^7.9.0",
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.0",
     "autoprefixer": "^9.7.5",
     "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
+    "core-js": "^3.6.4",
     "css-loader": "^3.4.2",
     "express": "^4.17.1",
     "file-loader": "^6.0.0",
@@ -33,6 +36,7 @@
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.2",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.10.3",
+    "webpack-merge": "^4.2.2"
   }
 }
