@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-03-31 18:18:03
- * @LastEditTime: 2020-03-31 18:40:55
+ * @LastEditTime: 2020-04-01 21:30:31
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/webpack_demo/webpack.common.js
@@ -15,8 +15,8 @@ module.exports = {
     main: './src/index.js'
   }, // 打包入口文件
   output: {
-    publicPath: '/',
-    filename: '[name]_[hash].js', // 打包输出文件
+    publicPath: './',
+    filename: '[name].js', // 打包输出文件
     path: path.resolve(__dirname, '../bundle') // 打包路径
   },
 
@@ -69,6 +69,33 @@ module.exports = {
         use: ['style-loader', 'css-loader'] //首先加载style-loader 加载css的dom,然后加载css loader 准备css的解析 最后sass-loader 解析scss文件 完成解析
       }
     ]
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all', // async 异步代码分割(自动) initial 同步代码分割(自动) all 同步代码分割(手动)
+      minSize: 0, // 默认执行代码分割的最小字节数
+      maxSize: 50000,  // 如果打包文件大于50kb,这会进行代码在分割,尝试向50kb靠近
+      minChunks: 2, // 当模块使用了至少x次才会进行代码分割
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        // 当设置all的时候会更新cacheGroups里面的规则进行打包
+        // 将node_modules里面引入的代码打包到vendors这个组里面,名字会根据打包目录,或者别名进行命名,或者为name字段
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          name: 'vendors' // 修改打包名
+        },
+        default: { // 当代码不被vendors里面的规则控制到的时候,打包文件就会根据default配置进行打包
+          // minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+          name: 'common'
+        }
+      }
+    }
   },
   plugins: [
     new CleanWebpackPlugin(),

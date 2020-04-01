@@ -350,5 +350,63 @@ optimization: {
 
 #### 代码分割（code Splitting）
 
+> 代码分割与webpack无关
+>
+> webpack实现代码分割只需要加入optimitzation配置即可
+>
+> 代码分割可以实现将不怎么修改的第三方库额外打包出来，这样就不需要额外的加载数据了，非常适合打包第三方库
+>
+> 只需要简单配置，即可开启代码分割
+>
+> 注意： 同步import的可以做到自动完成代码分割，但是动态引入的需要高版本的webpack作为支持
+>
+> 或者在.babelrc里面进行配置插件 babel-plugin-dynamic-import-webpack 
+
+```javascript
+ optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+```
+
+
+
+```
+import(/* webpackChunkName:"lodash" */ 'lodash')
+代码打包别名
+```
+
+
+
+#### SplitChunksPlugins
+
+> 代码分割主要依赖库
+
+##### 默认代码分割配置
+
+```
+splitChunks: {
+    chunks: "async",
+    minSize: 30000,
+    minChunks: 1,
+    maxAsyncRequests: 5,
+    maxInitialRequests: 3,
+    automaticNameDelimiter: '~',
+    name: true,
+    cacheGroups: {
+        vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10
+        },
+    default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true
+        }
+    }
+}
+```
+
 
 
