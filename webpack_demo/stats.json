@@ -1,0 +1,380 @@
+{
+  "errors": [],
+  "warnings": [],
+  "version": "4.42.0",
+  "hash": "c396dd7d266ff10e9675",
+  "time": 839,
+  "builtAt": 1585822731417,
+  "publicPath": "./",
+  "outputPath": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/bundle",
+  "assetsByChunkName": {
+    "main": "main-c396dd7d266ff10e9675.js"
+  },
+  "assets": [
+    {
+      "name": "index.html",
+      "size": 255,
+      "chunks": [],
+      "chunkNames": [],
+      "info": {},
+      "emitted": true
+    },
+    {
+      "name": "main-c396dd7d266ff10e9675.js",
+      "size": 1055,
+      "chunks": [
+        0
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+        "immutable": true
+      },
+      "emitted": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "main": {
+      "chunks": [
+        0
+      ],
+      "assets": [
+        "main-c396dd7d266ff10e9675.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "namedChunkGroups": {
+    "main": {
+      "chunks": [
+        0
+      ],
+      "assets": [
+        "main-c396dd7d266ff10e9675.js"
+      ],
+      "children": {},
+      "childAssets": {}
+    }
+  },
+  "chunks": [
+    {
+      "id": 0,
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 620,
+      "names": [
+        "main"
+      ],
+      "files": [
+        "main-c396dd7d266ff10e9675.js"
+      ],
+      "hash": "6e6275a2f72aa2b5e9e8",
+      "siblings": [],
+      "parents": [],
+      "children": [],
+      "childrenByOrder": {},
+      "modules": [
+        {
+          "id": 0,
+          "identifier": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/babel-loader/lib/index.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/src/index.js",
+          "name": "./src/index.js",
+          "index": 0,
+          "index2": 0,
+          "size": 620,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            0
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 41,
+            "building": 533
+          },
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./src/index.js",
+              "loc": "main"
+            }
+          ],
+          "usedExports": true,
+          "providedExports": null,
+          "optimizationBailout": [
+            "ModuleConcatenation bailout: Module is not an ECMAScript module"
+          ],
+          "depth": 0,
+          "source": "/*\n * @Author: your name\n * @Date: 2020-03-22 11:47:12\n * @LastEditTime: 2020-04-02 18:18:37\n * @LastEditors: Please set LastEditors\n * @Description: In User Settings Edit\n * @FilePath: /code-fragment/webpack_demo/index.js\n */\n// function setComponent() {\n//   return import('lodash').then(_ => {\n//     return element\n//   })\n// }\ndocument.addEventListener('click', () => {\n  var element = document.createElement('div');\n  element.innerHTML = 2312321312; //_.join(['11', '22', '33'], '-')\n\n  document.body.append(element); // setComponent().then(element => {\n  //   console.log('组件数据', element)\n  //\n  // })\n});"
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "main",
+          "request": "./src/index.js",
+          "reasons": []
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": 0,
+      "identifier": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/babel-loader/lib/index.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/src/index.js",
+      "name": "./src/index.js",
+      "index": 0,
+      "index2": 0,
+      "size": 620,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        0
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "profile": {
+        "factory": 41,
+        "building": 533
+      },
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./src/index.js",
+          "loc": "main"
+        }
+      ],
+      "usedExports": true,
+      "providedExports": null,
+      "optimizationBailout": [
+        "ModuleConcatenation bailout: Module is not an ECMAScript module"
+      ],
+      "depth": 0,
+      "source": "/*\n * @Author: your name\n * @Date: 2020-03-22 11:47:12\n * @LastEditTime: 2020-04-02 18:18:37\n * @LastEditors: Please set LastEditors\n * @Description: In User Settings Edit\n * @FilePath: /code-fragment/webpack_demo/index.js\n */\n// function setComponent() {\n//   return import('lodash').then(_ => {\n//     return element\n//   })\n// }\ndocument.addEventListener('click', () => {\n  var element = document.createElement('div');\n  element.innerHTML = 2312321312; //_.join(['11', '22', '33'], '-')\n\n  document.body.append(element); // setComponent().then(element => {\n  //   console.log('组件数据', element)\n  //\n  // })\n});"
+    }
+  ],
+  "filteredModules": 0,
+  "logging": {
+    "webpack.buildChunkGraph.visitModules": {
+      "entries": [],
+      "filteredEntries": 2,
+      "debug": false
+    }
+  },
+  "children": [
+    {
+      "errors": [],
+      "warnings": [],
+      "publicPath": "./",
+      "outputPath": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/bundle",
+      "assetsByChunkName": {
+        "HtmlWebpackPlugin_0": "__child-HtmlWebpackPlugin_0"
+      },
+      "assets": [
+        {
+          "name": "__child-HtmlWebpackPlugin_0",
+          "size": 4437,
+          "chunks": [
+            0
+          ],
+          "chunkNames": [
+            "HtmlWebpackPlugin_0"
+          ],
+          "info": {},
+          "emitted": false
+        }
+      ],
+      "filteredAssets": 0,
+      "entrypoints": {
+        "HtmlWebpackPlugin_0": {
+          "chunks": [
+            0
+          ],
+          "assets": [
+            "__child-HtmlWebpackPlugin_0"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "namedChunkGroups": {
+        "HtmlWebpackPlugin_0": {
+          "chunks": [
+            0
+          ],
+          "assets": [
+            "__child-HtmlWebpackPlugin_0"
+          ],
+          "children": {},
+          "childAssets": {}
+        }
+      },
+      "chunks": [
+        {
+          "id": 0,
+          "rendered": true,
+          "initial": true,
+          "entry": true,
+          "size": 758,
+          "names": [
+            "HtmlWebpackPlugin_0"
+          ],
+          "files": [
+            "__child-HtmlWebpackPlugin_0"
+          ],
+          "hash": "a32e3e73805423a242fc",
+          "siblings": [],
+          "parents": [],
+          "children": [],
+          "childrenByOrder": {},
+          "modules": [
+            {
+              "id": 0,
+              "identifier": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/html-webpack-plugin/lib/loader.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/public/index.html",
+              "name": "./node_modules/html-webpack-plugin/lib/loader.js!./public/index.html",
+              "index": 0,
+              "index2": 0,
+              "size": 758,
+              "cacheable": true,
+              "built": true,
+              "optional": false,
+              "prefetched": false,
+              "chunks": [
+                0
+              ],
+              "issuer": null,
+              "issuerId": null,
+              "issuerName": null,
+              "issuerPath": null,
+              "profile": {
+                "factory": 18,
+                "building": 11
+              },
+              "failed": false,
+              "errors": 0,
+              "warnings": 0,
+              "assets": [],
+              "reasons": [
+                {
+                  "moduleId": null,
+                  "moduleIdentifier": null,
+                  "module": null,
+                  "moduleName": null,
+                  "type": "single entry",
+                  "userRequest": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/html-webpack-plugin/lib/loader.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/public/index.html",
+                  "loc": "HtmlWebpackPlugin_0"
+                }
+              ],
+              "usedExports": true,
+              "providedExports": null,
+              "optimizationBailout": [
+                "ModuleConcatenation bailout: Module is not an ECMAScript module"
+              ],
+              "depth": 0,
+              "source": "var _ = __non_webpack_require__(\"/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/lodash/lodash.js\");module.exports = function (templateParams) { with(templateParams) {return (function(data) {\nvar __t, __p = '';\n__p += '<!--\\n * @Author: your name\\n * @Date: 2020-03-25 11:02:03\\n * @LastEditTime: 2020-03-25 11:02:22\\n * @LastEditors: Please set LastEditors\\n * @Description: In User Settings Edit\\n * @FilePath: /code-fragment/webpack_demo/public/index.html\\n -->\\n<!DOCTYPE html>\\n<html lang=\"en\">\\n\\n<head>\\n    <meta charset=\"UTF-8\">\\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\\n    <title>webpack学习</title>\\n</head>\\n\\n<body>\\n    <div class=\"root\"></div>\\n</body>\\n\\n</html>';\nreturn __p\n})();}}"
+            }
+          ],
+          "filteredModules": 0,
+          "origins": [
+            {
+              "module": "",
+              "moduleIdentifier": "",
+              "moduleName": "",
+              "loc": "HtmlWebpackPlugin_0",
+              "request": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/html-webpack-plugin/lib/loader.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/public/index.html",
+              "reasons": []
+            }
+          ]
+        }
+      ],
+      "modules": [
+        {
+          "id": 0,
+          "identifier": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/html-webpack-plugin/lib/loader.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/public/index.html",
+          "name": "./node_modules/html-webpack-plugin/lib/loader.js!./public/index.html",
+          "index": 0,
+          "index2": 0,
+          "size": 758,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            0
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "profile": {
+            "factory": 18,
+            "building": 11
+          },
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/html-webpack-plugin/lib/loader.js!/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/public/index.html",
+              "loc": "HtmlWebpackPlugin_0"
+            }
+          ],
+          "usedExports": true,
+          "providedExports": null,
+          "optimizationBailout": [
+            "ModuleConcatenation bailout: Module is not an ECMAScript module"
+          ],
+          "depth": 0,
+          "source": "var _ = __non_webpack_require__(\"/Users/vkcyan/Desktop/github/code-fragment/webpack_demo/node_modules/lodash/lodash.js\");module.exports = function (templateParams) { with(templateParams) {return (function(data) {\nvar __t, __p = '';\n__p += '<!--\\n * @Author: your name\\n * @Date: 2020-03-25 11:02:03\\n * @LastEditTime: 2020-03-25 11:02:22\\n * @LastEditors: Please set LastEditors\\n * @Description: In User Settings Edit\\n * @FilePath: /code-fragment/webpack_demo/public/index.html\\n -->\\n<!DOCTYPE html>\\n<html lang=\"en\">\\n\\n<head>\\n    <meta charset=\"UTF-8\">\\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\\n    <title>webpack学习</title>\\n</head>\\n\\n<body>\\n    <div class=\"root\"></div>\\n</body>\\n\\n</html>';\nreturn __p\n})();}}"
+        }
+      ],
+      "filteredModules": 0,
+      "logging": {
+        "webpack.buildChunkGraph.visitModules": {
+          "entries": [],
+          "filteredEntries": 2,
+          "debug": false
+        }
+      },
+      "children": [],
+      "name": "HtmlWebpackCompiler"
+    }
+  ]
+}

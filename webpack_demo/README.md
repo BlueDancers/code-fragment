@@ -408,5 +408,62 @@ splitChunks: {
 }
 ```
 
+##### 配置解析
+
+```javascript
+  optimization: {
+    splitChunks: {
+      chunks: 'all', // async 异步代码分割(自动) initial 同步代码分割(自动) all 同步代码分割(手动)
+      minSize: 30000, // 默认执行代码分割的最小字节数
+      // maxSize: 50000,  // 如果打包文件大于50kb,这会进行代码在分割,尝试向50kb靠近,很少用到
+      minChunks: 1, // 当模块使用了至少多少次次才会进行代码分割,很少用到
+      maxAsyncRequests: 5, // 同时加载的模块库,只为前五个库会进行代码分割,后面的不会进行分割了,很少用到
+      maxInitialRequests: 3, // 入口文件进行加载的时候,最多同时加载前三个库,后面的不会再进行分割,很少用到
+      automaticNameDelimiter: '~', // 组与文件,生成的时候的连接符,很少用到
+      name: true, // 打包生成文件文件支持自定义
+      cacheGroups: { // 分割代码规则定义(缓存组),可以对打包文件进行缓存,每次代码分割都会走缓存组里面的逻辑 
+        // 当设置all的时候会更新cacheGroups里面的规则进行打包
+        // 将node_modules里面引入的代码打包到vendors这个组里面,名字会根据打包目录,或者别名进行命名,或者为name字段
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10, // 权重,如果同时符合多个代码分割规则,则按priority的大小来定义应该
+          name: 'vendors' // 修改打包名
+        },
+        default: {
+          // 当代码不被vendors里面的规则控制到的时候,打包文件就会根据default配置进行打包
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true, // 如果一个模块已经被打包过了,那么就不会打包已经引用的模块,会使用之前打包过的模块
+          name: 'common'
+        }
+      }
+    }
+  },
+```
+
+代码分割是解决打包后的大文件的好办法，可以将第三方库进行分离进而减小包的大小，但是也不是越分割越好，因为打包的文件太多的话，http请求也会变慢，所以需要合理的进行代码分割达到优化打包
+
+注： 代码分割只会对重复访问有效果，无法优化第一次加载时间
+
+
+
+##### Lazy Loading
+
+也就是异步import 的概念，在函数运行中动态引入某个模块的，例如路由懒加载
+
+
+
+##### 预加载模块
+
+> 官方推荐编码方式
+>
+> 通过注释webpackPrefetch来实现预加载功能
+
+```js
+import(/* webpackPrefetch: true */ 'LoginModal');
+```
+
+
+
 
 
