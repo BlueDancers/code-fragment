@@ -465,5 +465,27 @@ import(/* webpackPrefetch: true */ 'LoginModal');
 
 
 
+#### 打包库文件
+
+```javascript
+const path = require('path')
+module.exports = {
+  entry: '../src/index',
+  externals: ['lodash'],
+  // 如果我们想引用一个库，但是又不想让webpack打包，并且又不影响我们在程序中以CMD、AMD或者window/global全局等方式进行使用，那就可以通过配置externals。这个功能主要是用在创建一个库的时候用
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'library', // 打包名
+    library: 'library', // 注入全局变量
+    libraryTarget: 'umd' // 全平台打包方式
+  }
+}
+```
 
 
+
+#### externals
+
+externals主要为告诉wbpack打包的时候忽略那些库，在打包项目的时候可以引入cdn，同时配置externals，来做到不加载库文件，
+
+同时也可以配置不同环境的打包代码，例如原始环境，exmodules，common环境
