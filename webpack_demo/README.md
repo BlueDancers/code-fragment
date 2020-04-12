@@ -489,3 +489,13 @@ module.exports = {
 externals主要为告诉wbpack打包的时候忽略那些库，在打包项目的时候可以引入cdn，同时配置externals，来做到不加载库文件，
 
 同时也可以配置不同环境的打包代码，例如原始环境，exmodules，common环境
+
+
+
+项目打包优化
+
+使用exclude，来去除无需打包的js代码
+
+尽可能少的使用plugins，尤其是开发环境，可优化启动速度
+
+  
