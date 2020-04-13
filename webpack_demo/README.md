@@ -492,10 +492,68 @@ externals主要为告诉wbpack打包的时候忽略那些库，在打包项目�
 
 
 
-项目打包优化
+#### 项目打包优化
 
 使用exclude，来去除无需打包的js代码
 
 尽可能少的使用plugins，尤其是开发环境，可优化启动速度
 
-  
+关于项目启动速度优化： DllPlugin
+
+##### DllPlugin
+
+对于库的代码，也就是不经常变动的代码，可以单独抽离出来，这样以后打包就不编译这些模块了
+
+过程：
+
+- 对库进行单独打包，并使用webpack.DllPlugin生成manifest.json的映射文件
+- 通过addAssetHtmlwebpackPlugin进行打包生成的第三方代码的注入，并使用webpack.DllReferencePlugin来完成对manifest.json文件配置读取
+
+
+
+webpack.dll.js
+
+> 对第三方库进行提取，并生成manifest映射文件
+
+```js
+const webpack = require('webpack')
+const path = require('path')
+
+module.exports = {
+  mode: 'production',
+  entry: {
+    lodash: ['lodash'],
+  },
+  output: {
+    filename: '[name].dll.js',
+    path: path.resolve(__dirname, '../dll'),
+    library: '[name]', // 必须暴露出去,才可以被引用
+  },
+  plugins: [
+    // 库映射关系文件,
+    new webpack.DllPlugin({
+      name: '[name]',
+      path: path.resolve(__dirname, '../dll/[name].manifest.json'),
+    }),
+  ],
+}
+
+```
+
+
+
+webpack.common.js
+
+> 将生成的dll文件进行直接注入，打包到时候就不会在进行打包库文件了
+
+```javascript
+ // 向生成的html里面注入一个文件
+new addAssetHtmlWebpackPlugin({
+  filepath: path.resolve(__dirname, '../dll/vendors.dll.js'),
+}),
+// 注入第三方库的映射文件
+new webpack.DllReferencePlugin({
+  manifest: path.resolve(__dirname, '../dll/vendors.manifest.json'),
+}),
+```
+
