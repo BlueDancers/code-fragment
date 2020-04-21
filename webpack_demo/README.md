@@ -557,3 +557,69 @@ new webpack.DllReferencePlugin({
 }),
 ```
 
+
+
+注：后期使用感觉，提升不是太明显，感觉用处不大
+
+
+
+关于开发的建议
+
+1. 尽量控制包的大小
+2. 多线程打包
+3. 合理使用sourceMap
+4. 对打包结果进行分析
+5. 对静态库文件进行缓存，跳过编译过程
+6. 减少不必要的插件的使用
+
+
+
+
+
+### 如何自己实现loader
+
+loader是导出一个函数的node模块，所有给定范围的代码都会走loader内部代码，进行代码的转义以及对特定场景的实现，例如提现某个文件里面的某个字段，loader的作用
+
+总而言之，loader就像一个加工器，用来给特定未见做加工的一个工具
+
+> 将hello换成给定的options里面的name字段
+
+```
+const loaderUtils = require('loader-utils')
+module.exports = function (source) {
+  const option = loaderUtils.getOptions(this)
+  return source.replace('hello', this.query.name)
+}
+
+```
+
+
+
+```javascript
+module: {
+    rules: [
+      {
+        test: /\.js/,
+        use: [
+          {
+            loader: path.resolve(__dirname, './loaders/replaceLoader.js'),
+            options: {
+              name: 'vkcyan',
+            },
+          },
+        ],
+      },
+    ],
+  },
+```
+
+
+
+
+
+
+
+
+
+
+
