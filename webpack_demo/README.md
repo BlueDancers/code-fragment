@@ -615,11 +615,188 @@ module: {
 
 
 
+#### 一个bunder的实现
+
+````javascript
+const path = require('path')
+const fs = require('fs')
+const parser = require('@babel/parser')
+const traverse = require('@babel/traverse').default
+const babel = require('@babel/core')
+
+const moduleAnalyser = (filename) => {
+  const content = fs.readFileSync(filename, 'utf-8') //读取文件内容
+  const dependencies = {} // 文件依赖关系存储
+  const ast = parser.parse(content, {
+    // 语法分析为ast语法
+    sourceType: 'module',
+  })
+  // 通过ast抽象语法书
+  traverse(ast, {
+    // 分析依赖故乡里
+    ImportDeclaration({ node }) {
+      let dirname = path.dirname(filename)
+      const newFile = './' + path.join(dirname, node.source.value)
+      // 对依赖关系进行映射
+      dependencies[node.source.value] = newFile
+    },
+  })
+  // 将高级语法转化为es5语法
+  let { code } = babel.transformFromAst(ast, null, {
+    presets: ['@babel/preset-env'],
+  })
+  return {
+    filename,
+    dependencies,
+    code,
+  }
+}
+
+const moduleInfo = moduleAnalyser('./src/index.js')
+console.log(moduleInfo)
+````
+
+可以分析出我们的代码，并进行下一步的分析
+
+```bash
+{
+  filename: './src/index.js',
+  dependencies: { './message.js': './src/message.js' },
+  code: '"use strict";\n' +
+    '\n' +
+    'var _message = _interopRequireDefault(require("./message.js"));\n' +
+    '\n' +
+    'function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }\n' +
+    '\n' +
+    '/*\n' +
+    ' * @Author: your name\n' +
+    ' * @Date: 2020-04-22 19:36:14\n' +
+    ' * @LastEditTime: 2020-04-22 19:43:04\n' +
+    ' * @LastEditors: Please set LastEditors\n' +
+    ' * @Description: In User Settings Edit\n' +
+    ' * @FilePath: /code-fragment/bundler/src/index.js\n' +
+    ' */\n' +
+    'console.log(_message["default"]);'
+}
+```
 
 
 
 
 
+对引用关系的文件进行查询，生成依赖关系图
+
+```js
+/*
+ * @Author: your name
+ * @Date: 2020-04-22 19:43:57
+ * @LastEditTime: 2020-04-23 21:18:01
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /code-fragment/bundler/bundler.js
+ */
+const path = require('path')
+const fs = require('fs')
+const parser = require('@babel/parser')
+const traverse = require('@babel/traverse').default
+const babel = require('@babel/core')
+
+const moduleAnalyser = (filename) => {
+  const content = fs.readFileSync(filename, 'utf-8') //读取文件内容
+  const dependencies = {} // 文件依赖关系存储
+  const ast = parser.parse(content, {
+    // 语法分析为ast语法
+    sourceType: 'module',
+  })
+  // 通过ast抽象语法书
+  traverse(ast, {
+    // 分析依赖故乡里
+    ImportDeclaration({ node }) {
+      let dirname = path.dirname(filename)
+      const newFile = './' + path.join(dirname, node.source.value)
+      // 对依赖关系进行映射
+      dependencies[node.source.value] = newFile
+    },
+  })
+  // 将高级语法转化为es5语法
+  let { code } = babel.transformFromAst(ast, null, {
+    presets: ['@babel/preset-env'],
+  })
+  return {
+    filename,
+    dependencies,
+    code,
+  }
+}
+
+const makeDependenciesGraph = (entry) => {
+  const entryModule = moduleAnalyser(entry)
+  const graphArray = [entryModule]
+  for (let i = 0; i < graphArray.length; i++) {
+    const item = graphArray[i]
+    const { dependencies } = item
+    console.log(dependencies)
+    if (dependencies) {
+      for (const key in dependencies) {
+        graphArray.push(moduleAnalyser(dependencies[key]))
+      }
+    }
+  }
+  const graph = {}
+  graphArray.map((item) => {
+    graph[item.filename] = {
+      dependencies: item.dependencies,
+      code: item.code,
+    }
+  })
+  console.log(graph)
+  return graph
+}
+
+const grphInfo = makeDependenciesGraph('./src/index.js')
+
+```
 
 
+
+```bash
+{
+  './src/index.js': {
+    dependencies: { './message.js': './src/message.js' },
+    code: '"use strict";\n' +
+      '\n' +
+      'var _message = _interopRequireDefault(require("./message.js"));\n' +
+      '\n' +
+      'function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }\n' +
+      '\n' +
+      'console.log(_message["default"]);'
+  },
+  './src/message.js': {
+    dependencies: { './work.js': './src/work.js' },
+    code: '"use strict";\n' +
+      '\n' +
+      'Object.defineProperty(exports, "__esModule", {\n' +
+      '  value: true\n' +
+      '});\n' +
+      'exports["default"] = void 0;\n' +
+      '\n' +
+      'var _work = require("./work.js");\n' +
+      '\n' +
+      'var _default = "say ".concat(_work.word);\n' +
+      '\n' +
+      'exports["default"] = _default;'
+  },
+  './src/work.js': {
+    dependencies: {},
+    code: '"use strict";\n' +
+      '\n' +
+      'Object.defineProperty(exports, "__esModule", {\n' +
+      '  value: true\n' +
+      '});\n' +
+      'exports.word = void 0;\n' +
+      "var word = 'hello';\n" +
+      'exports.word = word;'
+  }
+}
+```
 
