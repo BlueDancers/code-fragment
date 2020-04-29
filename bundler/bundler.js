@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-04-22 19:43:57
- * @LastEditTime: 2020-04-28 19:56:13
+ * @LastEditTime: 2020-04-29 10:11:59
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/bundler/bundler.js
@@ -43,6 +43,7 @@ const moduleAnalyser = (filename) => {
 const makeDependenciesGraph = (entry) => {
   const entryModule = moduleAnalyser(entry)
   const graphArray = [entryModule]
+  // 循环所有依赖文件,处理依赖关系
   for (let i = 0; i < graphArray.length; i++) {
     const item = graphArray[i]
     const { dependencies } = item
@@ -53,6 +54,7 @@ const makeDependenciesGraph = (entry) => {
     }
   }
   const graph = {}
+  // 处理数据结构,以便于后面进行代码分析
   graphArray.map((item) => {
     graph[item.filename] = {
       dependencies: item.dependencies,
@@ -67,6 +69,7 @@ const generateCode = (entry) => {
   return `
     (function (graph){
       // graph为全部的代码处理数据
+      // 带入require函数,帮助父级代码递归找到引用的模块代码
       function require(module) {
         function localRequire(relativePath) {
           // 进行递归所有引用文件
@@ -75,6 +78,7 @@ const generateCode = (entry) => {
         var exports = {};
         (function(require, exports, code){
           eval(code)
+          // exports会在打包代码中进行填充,将数据逐步填充到最父级
         })(localRequire, exports, graph[module].code);
         return exports
       }
