@@ -728,7 +728,7 @@ const moduleAnalyser = (filename) => {
     code,
   }
 }
-
+// 循环所有数据的，并整理其依赖关系
 const makeDependenciesGraph = (entry) => {
   const entryModule = moduleAnalyser(entry)
   const graphArray = [entryModule]
@@ -758,6 +758,8 @@ const grphInfo = makeDependenciesGraph('./src/index.js')
 ```
 
 
+
+// 整理出其中的依赖关系
 
 ```bash
 {
@@ -799,4 +801,6 @@ const grphInfo = makeDependenciesGraph('./src/index.js')
   }
 }
 ```
+
+
 

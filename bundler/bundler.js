@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2020-04-22 19:43:57
- * @LastEditTime: 2020-04-23 21:25:15
+ * @LastEditTime: 2020-04-28 19:56:13
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /code-fragment/bundler/bundler.js
@@ -44,7 +44,6 @@ const makeDependenciesGraph = (entry) => {
   const entryModule = moduleAnalyser(entry)
   const graphArray = [entryModule]
   for (let i = 0; i < graphArray.length; i++) {
-    console.log('变化了', graphArray)
     const item = graphArray[i]
     const { dependencies } = item
     if (dependencies) {
@@ -60,8 +59,29 @@ const makeDependenciesGraph = (entry) => {
       code: item.code,
     }
   })
-  console.log(graph)
   return graph
 }
 
-const grphInfo = makeDependenciesGraph('./src/index.js')
+const generateCode = (entry) => {
+  const graph = JSON.stringify(makeDependenciesGraph(entry))
+  return `
+    (function (graph){
+      // graph为全部的代码处理数据
+      function require(module) {
+        function localRequire(relativePath) {
+          // 进行递归所有引用文件
+          return require(graph[module].dependencies[relativePath])
+        }
+        var exports = {};
+        (function(require, exports, code){
+          eval(code)
+        })(localRequire, exports, graph[module].code);
+        return exports
+      }
+      require('${entry}')
+    })(${graph})
+  `
+}
+
+const code = generateCode('./src/index.js')
+console.log(code)
