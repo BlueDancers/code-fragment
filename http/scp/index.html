@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+    <!-- meta的方式也可以实现scp,但是建议http请求头进行设置 -->
+    <title>cookie请求</title>
+</head>
+
+<body>
+    <div>
+        请求成功
+    </div>
+    <img src="http://t8.baidu.com/it/u=3571592872,3353494284&fm=79&app=86&f=JPEG?w=1200&h=1290" alt="">
+    <form action="http://baidu.com">
+        <button type="submit">点击提交</button>
+    </form>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script src="./test.js"></script>
+<script>
+    console.log('内嵌script');
+</script>
+
+</html>
