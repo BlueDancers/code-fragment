@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nginx缓存</title>
+</head>
+
+<body>
+    <p>
+        11
+    </p>
+    <button id="button" onclick="doRequest()">click me</button>
+</body>
+<script>
+    // document.getElementById('button').click = doRequest
+    var index = 0
+    function doRequest() {
+
+        fetch('/data', {
+            headers: {
+                'X-Test-Cache': index++
+            }
+        }).then(res => {
+            res.text().then(res => {
+                console.log(res);
+            })
+        })
+    }
+
+</script>
+
+</html>
