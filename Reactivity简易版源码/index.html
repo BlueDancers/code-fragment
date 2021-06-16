@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reactivity - Demo</title>
+  </head>
+  <body>
+    <input id="r" type="range" max="255" min="0" />
+    <input id="g" type="range" max="255" min="0" />
+    <input id="b" type="range" max="255" min="0" />
+    <p id="color_text"></p>
+    <div id="color" style="width: 100px; height: 100px"></div>
+    <p id="computed_text"></p>
+
+    <script src="./index.js"></script>
+    <script>
+      const object = {
+        r: 0,
+        g: 0,
+        b: 0,
+        o: {
+          a: 1,
+        },
+      }
+      // 实现响应时间听
+      // 实现计算属性
+      // 实现effect hook函数
+      const proxy = reactive(object)
+
+      const computedObj = computed(() => {
+        return proxy.r * 2
+      })
+
+      effect(() => {
+        console.log(`proxy.o.a: ${proxy.o.a}`)
+      })
+
+      effect(() => {
+        let r = proxy.r
+        let g = proxy.g
+        let b = proxy.b
+        document.getElementById('r').value = r
+        document.getElementById('b').value = b
+        document.getElementById('g').value = g
+        document.getElementById('color').style.backgroundColor = `rgb(${r},${g},${b})`
+        document.getElementById('color_text').innerText = `rgb：${r},${g},${b}`
+
+        const { value } = computedObj
+        document.getElementById('computed_text').innerText = `computed_text: r*2=${value}`
+      })
+
+      document.getElementById('r').addEventListener('input', (event) => (proxy.r = event.target.value))
+      document.getElementById('g').addEventListener('input', (event) => (proxy.g = event.target.value))
+      document.getElementById('b').addEventListener('input', (event) => (proxy.b = event.target.value))
+    </script>
+  </body>
+</html>
