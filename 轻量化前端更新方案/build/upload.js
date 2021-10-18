@@ -5,16 +5,8 @@ const archiver = require('archiver')
 const inquirer = require('inquirer')
 const exec = require('child_process').exec
 const ssh = new NodeSSH()
-const uploadFun = require('../upload.js')
+const uploadFun = require('../upload.config.js')
 
-/**
- * 1. 验证上线代码是否正确
- * 2. 打包项目
- * 3. 连接线上ssh
- * 5. 根据配置在指定目录上传指定名称的代码压缩包
- * 6. 备份之前项目,解压线上压缩包
- * 6. 删除本地打包
- */
 
 /**
  * 获取当前平台
