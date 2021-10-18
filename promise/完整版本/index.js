@@ -266,8 +266,8 @@ APromise.any = function (promiseList) {
 
 /**
  * 保存所有的成功与失败
- * @param {*} promiseList 
- * @returns 
+ * @param {*} promiseList
+ * @returns
  */
 APromise.allSettled = function (promiseList) {
   if (!Array.isArray(promiseList)) {
@@ -406,6 +406,19 @@ APromise.allSettled([1, 2, 3, p1, p2, p3, p4]).then((res) => {
 //   )
 // )
 // 返回值为2
+
+new Promise((resolve, reject) => {
+  resolve(11111)
+})
+  .then((res) => {
+    return res
+  })
+  .finally(() => {
+    console.log(111)
+  })
+  .then((data) => {
+    console.log(data)
+  })
 
 APromise.defer = APromise.deferred = function () {
   let dfd = {}
