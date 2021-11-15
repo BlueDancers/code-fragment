@@ -1,0 +1,58 @@
+stages: # 分段
+  - preInstall
+  - install
+  - build
+  - deploy
+
+variables:
+  BUILDDIR: admin # 打包文件名
+  PRODDIR: admin_test # 线上文件名
+
+cache: # 缓存
+  paths:
+    - node_modules
+    - admin
+
+preInstall-job:
+  stage: preInstall
+  only:
+    refs:
+      - prod-pre
+    changes:
+      - package.json
+  script:
+    - echo "依赖发生变化,开始install🔥🔥🔥"
+    - cnpm install
+    - echo "完成install🔥🔥🔥"
+
+install-job:
+  stage: install
+  only:
+    refs:
+      - prod-pre
+  script:
+    - echo "开始install🔥🔥🔥"
+    - if [ ! -d "./node_modules/" ];then   cnpm install;   else   echo "缓存存在,跳过install"; fi
+    - echo "完成install🔥🔥🔥"
+
+build-job:
+  stage: build
+  only:
+    - prod-pre
+  script:
+    - echo "开始代码打包💪💪💪"
+    - npm run build
+    - echo "完成代码打包💪💪💪"
+
+deploy-job:
+  stage: deploy
+  only:
+    - prod-pre
+  before_script:
+    - echo "发射到目标服务器✨✨✨"
+  script:
+    - sshpass -p $PASSWORD scp -o StrictHostKeyChecking=no -r ./$BUILDDIR/. $USERNAME@$HOST:$UPLOADDIR/dist/ # 将打包完成的文件复制到目标服务器
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USERNAME@$HOST rm -rf $UPLOADDIR/$PRODDIR # 删除原有文件
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no $USERNAME@$HOST mv $UPLOADDIR/dist $UPLOADDIR/$PRODDIR # 将目标文件改为服务端真正文件
+  after_script:
+    - echo "完成更新👏👏👏"
